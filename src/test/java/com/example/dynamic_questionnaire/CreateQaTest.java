@@ -3,6 +3,7 @@ package com.example.dynamic_questionnaire;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -29,9 +30,9 @@ public class CreateQaTest {
 		QuestionsReq req = new QuestionsReq();
 		req.setTitle("Test4");
 		req.setDescription("For test4");
-		QuestionsAndAns qa1 = new QuestionsAndAns("Test4","q1","a1;a2;a3",false,false);
-		QuestionsAndAns qa2 = new QuestionsAndAns("Test4","q2","a1;a2;a3",false,false);
-		QuestionsAndAns qa3 = new QuestionsAndAns("Test4","q3","a1;a2;a3",false,false);
+		QuestionsAndAns qa1 = new QuestionsAndAns("q1","a1;a2;a3",false,false);
+		QuestionsAndAns qa2 = new QuestionsAndAns("q2","a1;a2;a3",false,false);
+		QuestionsAndAns qa3 = new QuestionsAndAns("q3","a1;a2;a3",false,false);
 		List<QuestionsAndAns> qaList = Arrays.asList(qa1,qa2,qa3);
 		
 		req.setQaList(qaList);
@@ -51,7 +52,7 @@ public class CreateQaTest {
 	
 	@Test
 	public void showAllQuestionnaire() {
-		QuestionsRes result = questionsService.showAllQuestionnaire();
+		QuestionsRes result = questionsService.readAllQuestionnaire();
 		List<Questionnaire> list = result.getQuestionnaireList();
 		for(Questionnaire item : list) {
 			System.out.println(item.getTitle());
@@ -86,6 +87,37 @@ public class CreateQaTest {
 		
 		QuestionsRes res = questionsService.updateQuestionnaire(req);
 		System.out.println(res.getMessage());
+	}
+	
+	@Test
+	public void deleteQuestionnaire() {
+		List<Integer> idList = Arrays.asList(13,14);
+		QuestionsReq req = new QuestionsReq();
+		req.setQuestionnaireIdList(idList);
+		QuestionsRes res = questionsService.deleteQuestionnaire(req);
+		System.out.println(res.getMessage());
 		
 	}
+	
+	@Test
+	public void showQaByTitle() {
+		QuestionsReq req = new QuestionsReq();
+		req.setQuestionnaireId(15);
+		QuestionsRes res = questionsService.readQaByQuestionnaireTitle(req);
+		
+		List<QuestionsAndAns> result = res.getQaList();
+		for(QuestionsAndAns item : result) {
+			System.out.println(item.getQuestions()+" "+item.getAns());
+		}
+	}
+	
+	@Test
+	public void deleteQa() {
+		QuestionsReq req = new QuestionsReq();
+		List<Integer> idList = Arrays.asList(42,43);
+		req.setQaIdList(idList);
+		QuestionsRes res = questionsService.deleteQAndA(req);
+		System.out.println(res.getMessage());
+	}
+	
 }

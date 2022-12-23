@@ -35,8 +35,8 @@ public class QuestionsAndAns {
 		
 	}
 	
-	public QuestionsAndAns(String questionnaireTitle, String questions, String ans, boolean oneOrMany, boolean necessary) {
-		this.questionnaireTitle = questionnaireTitle;
+	public QuestionsAndAns(String questions, String ans, boolean oneOrMany, boolean necessary) {
+		
 		this.questions = questions;
 		this.ans = ans;
 		this.oneOrMany = oneOrMany;

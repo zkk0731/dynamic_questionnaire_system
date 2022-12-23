@@ -5,20 +5,27 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.dynamic_questionnaire.entity.QuestionsAndAns;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class QuestionsReq {
 
 	private int questionnaireId;
 	
+	private List<Integer> questionnaireIdList;
+	
 	private String title;
 	
 	private String description;
 	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate startTime;
 	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate endTime;
 	
 	private List<QuestionsAndAns> qaList;
+	
+	private List<Integer> QaIdList;
 	
 	private String questions;
 	
@@ -111,6 +118,23 @@ public class QuestionsReq {
 	public void setQaList(List<QuestionsAndAns> qaList) {
 		this.qaList = qaList;
 	}
+
+	public List<Integer> getQuestionnaireIdList() {
+		return questionnaireIdList;
+	}
+
+	public void setQuestionnaireIdList(List<Integer> questionnaireIdList) {
+		this.questionnaireIdList = questionnaireIdList;
+	}
+
+	public List<Integer> getQaIdList() {
+		return QaIdList;
+	}
+
+	public void setQaIdList(List<Integer> qaIdList) {
+		QaIdList = qaIdList;
+	}
+	
 	
 	
 }
