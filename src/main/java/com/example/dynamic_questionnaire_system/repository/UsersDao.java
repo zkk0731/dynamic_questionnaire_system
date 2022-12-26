@@ -11,4 +11,6 @@ import com.example.dynamic_questionnaire_system.entity.Users;
 public interface UsersDao extends JpaRepository<Users, Integer>{
 
 	public List<Users> findByQuestionnaireTitle(String questionnaireTitle);
+	
+	public List<Users> findAllByOrderByFinishTimeDesc();
 }

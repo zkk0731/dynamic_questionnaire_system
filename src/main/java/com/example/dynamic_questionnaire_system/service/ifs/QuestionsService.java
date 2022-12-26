@@ -23,4 +23,7 @@ public interface QuestionsService {
 	
 	//刪除題目
 	public QuestionsRes deleteQAndA(QuestionsReq req);
+	
+	//搜尋
+	public QuestionsRes search(QuestionsReq req);
 }

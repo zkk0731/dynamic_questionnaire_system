@@ -190,6 +190,62 @@ public class QuestionsServiceImpl implements QuestionsService{
 		questionsAndAnsDao.deleteAllById(req.getQaIdList());
 		return new QuestionsRes(RtnCode.SUCCESS.getMessage());
 	}
+
+	//搜尋
+	@Override
+	public QuestionsRes search(QuestionsReq req) {
+		QuestionsRes res = new QuestionsRes();
+		List<Questionnaire> result = new ArrayList<>();
+		int caseInt = searchParamCheck(req);
+		switch (caseInt) {
+		case 0:
+			result = questionnaireDao.findAll();
+			
+			break;
+
+		
+		}
+		return null;
+	}
 	
+	private int searchParamCheck(QuestionsReq req) {
+		//指輸入文字
+		if(StringUtils.hasText(req.getTitle()) 
+				&& req.getStartTime() == null 
+				&& req.getEndTime() == null) {
+			return 1;
+		}//輸入文字跟開始時間
+		else if(StringUtils.hasText(req.getTitle()) 
+				&& req.getStartTime() != null 
+				&& req.getEndTime() == null) {
+			return 2;
+		}//輸入文字跟結束時間
+		else if(StringUtils.hasText(req.getTitle()) 
+				&& req.getStartTime() == null 
+				&& req.getEndTime() != null) {
+			return 3;
+		}//輸入文字跟開始結束時間
+		else if(StringUtils.hasText(req.getTitle()) 
+				&& req.getStartTime() != null 
+				&& req.getEndTime() != null) {
+			return 4;
+		}//只輸入開始時間
+		else if(!StringUtils.hasText(req.getTitle()) 
+				&& req.getStartTime() != null 
+				&& req.getEndTime() == null) {
+			return 5;
+		}//只輸入結束時間
+		else if(!StringUtils.hasText(req.getTitle()) 
+				&& req.getStartTime() == null 
+				&& req.getEndTime() != null) {
+			return 6;
+		}//輸入開始結束時間
+		else if(!StringUtils.hasText(req.getTitle()) 
+				&& req.getStartTime() != null 
+				&& req.getEndTime() != null) {
+			return 7;
+		}
+		return 0;
+	}
 
 }

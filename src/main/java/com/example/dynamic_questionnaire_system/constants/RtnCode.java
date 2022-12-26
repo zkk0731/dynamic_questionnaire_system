@@ -12,6 +12,8 @@ public enum RtnCode {
 	NO_QUESTIONNAIRE("403","無問卷"),
 	NO_DELETED_QUESTIONNAIRE("200","無刪除任何問卷"),
 	NO_DELETED_QA("200","無刪除任何題目"),
+	NO_STATISTICS_RESULT("403","無統計結果"),
+	NO_USERS("403","無使用者填寫"),
 	QUESTIONS_ALREADY_EXIST("403","問題已存在");
 	
 	private String code;
