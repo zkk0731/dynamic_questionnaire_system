@@ -1,4 +1,4 @@
-package com.example.dynamic_questionnaire.entity;
+package com.example.dynamic_questionnaire_system.entity;
 
 import java.time.LocalDateTime;
 

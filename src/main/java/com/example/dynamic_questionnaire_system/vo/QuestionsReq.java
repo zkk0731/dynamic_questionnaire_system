@@ -1,10 +1,10 @@
-package com.example.dynamic_questionnaire.vo;
+package com.example.dynamic_questionnaire_system.vo;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-import com.example.dynamic_questionnaire.entity.QuestionsAndAns;
+import com.example.dynamic_questionnaire_system.entity.QuestionsAndAns;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class QuestionsReq {

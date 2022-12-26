@@ -1,4 +1,4 @@
-package com.example.dynamic_questionnaire.constants;
+package com.example.dynamic_questionnaire_system.constants;
 
 public enum RtnCode {
 	SUCCESS("200","Success"),

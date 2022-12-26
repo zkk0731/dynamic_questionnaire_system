@@ -1,4 +1,4 @@
-package com.example.dynamic_questionnaire.entity;
+package com.example.dynamic_questionnaire_system.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

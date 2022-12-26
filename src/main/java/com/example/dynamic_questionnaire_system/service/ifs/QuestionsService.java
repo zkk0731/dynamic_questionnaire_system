@@ -1,7 +1,7 @@
-package com.example.dynamic_questionnaire.service.ifs;
+package com.example.dynamic_questionnaire_system.service.ifs;
 
-import com.example.dynamic_questionnaire.vo.QuestionsReq;
-import com.example.dynamic_questionnaire.vo.QuestionsRes;
+import com.example.dynamic_questionnaire_system.vo.QuestionsReq;
+import com.example.dynamic_questionnaire_system.vo.QuestionsRes;
 
 public interface QuestionsService {
 	

@@ -1,6 +1,7 @@
-package com.example.dynamic_questionnaire.vo;
+package com.example.dynamic_questionnaire_system.vo;
 
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -10,6 +11,8 @@ public class AnsStatisticsRes {
 	private String message;
 	
 	private List<QAndAStatistics> qaStatisticsList;
+	
+	private Map<String,Map<String,Integer>>qaStatisticsMap;
 
 	public AnsStatisticsRes() {
 		
@@ -33,6 +36,14 @@ public class AnsStatisticsRes {
 
 	public void setQaStatisticsList(List<QAndAStatistics> qaStatisticsList) {
 		this.qaStatisticsList = qaStatisticsList;
+	}
+
+	public Map<String, Map<String, Integer>> getQaStatisticsMap() {
+		return qaStatisticsMap;
+	}
+
+	public void setQaStatisticsMap(Map<String, Map<String, Integer>> qaStatisticsMap) {
+		this.qaStatisticsMap = qaStatisticsMap;
 	}
 	
 	

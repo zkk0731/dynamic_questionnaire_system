@@ -1,4 +1,4 @@
-package com.example.dynamic_questionnaire.repository;
+package com.example.dynamic_questionnaire_system.repository;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
-import com.example.dynamic_questionnaire.entity.QuestionsAndAns;
+import com.example.dynamic_questionnaire_system.entity.QuestionsAndAns;
 
 @Repository
 public interface QuestionsAndAnsDao extends JpaRepository<QuestionsAndAns, Integer>{

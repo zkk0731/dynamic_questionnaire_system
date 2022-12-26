@@ -1,4 +1,4 @@
-package com.example.dynamic_questionnaire.controller;
+package com.example.dynamic_questionnaire_system.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.dynamic_questionnaire.constants.RtnCode;
-import com.example.dynamic_questionnaire.service.ifs.QuestionsService;
-import com.example.dynamic_questionnaire.vo.QuestionsReq;
-import com.example.dynamic_questionnaire.vo.QuestionsRes;
+import com.example.dynamic_questionnaire_system.constants.RtnCode;
+import com.example.dynamic_questionnaire_system.service.ifs.QuestionsService;
+import com.example.dynamic_questionnaire_system.vo.QuestionsReq;
+import com.example.dynamic_questionnaire_system.vo.QuestionsRes;
 
 @RestController
 public class QuestionnaireController {

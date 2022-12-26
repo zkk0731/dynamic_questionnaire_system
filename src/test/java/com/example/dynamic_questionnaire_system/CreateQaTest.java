@@ -1,4 +1,4 @@
-package com.example.dynamic_questionnaire;
+package com.example.dynamic_questionnaire_system;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,11 +13,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.example.dynamic_questionnaire.entity.Questionnaire;
-import com.example.dynamic_questionnaire.entity.QuestionsAndAns;
-import com.example.dynamic_questionnaire.service.ifs.QuestionsService;
-import com.example.dynamic_questionnaire.vo.QuestionsReq;
-import com.example.dynamic_questionnaire.vo.QuestionsRes;
+import com.example.dynamic_questionnaire_system.entity.Questionnaire;
+import com.example.dynamic_questionnaire_system.entity.QuestionsAndAns;
+import com.example.dynamic_questionnaire_system.service.ifs.QuestionsService;
+import com.example.dynamic_questionnaire_system.vo.QuestionsReq;
+import com.example.dynamic_questionnaire_system.vo.QuestionsRes;
 
 @SpringBootTest
 public class CreateQaTest {
@@ -28,14 +28,14 @@ public class CreateQaTest {
 	@Test
 	public void createTest1() {
 		QuestionsReq req = new QuestionsReq();
-		req.setTitle("Test4");
-		req.setDescription("For test4");
-		QuestionsAndAns qa1 = new QuestionsAndAns("q1","a1;a2;a3",false,false);
-		QuestionsAndAns qa2 = new QuestionsAndAns("q2","a1;a2;a3",false,false);
-		QuestionsAndAns qa3 = new QuestionsAndAns("q3","a1;a2;a3",false,false);
-		List<QuestionsAndAns> qaList = Arrays.asList(qa1,qa2,qa3);
+		req.setTitle("Test6");
+		req.setDescription("For test6");
+//		QuestionsAndAns qa1 = new QuestionsAndAns("q1","a1;a2;a3",false,false);
+//		QuestionsAndAns qa2 = new QuestionsAndAns("q2","a1;a2;a3",false,false);
+//		QuestionsAndAns qa3 = new QuestionsAndAns("q3","a1;a2;a3",false,false);
+//		List<QuestionsAndAns> qaList = Arrays.asList(qa1,qa2,qa3);
 		
-		req.setQaList(qaList);
+//		req.setQaList(qaList);
 		String dateStr1 = "2022-10-01";
 		String dateStr2 = "2022-11-30";
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -120,4 +120,13 @@ public class CreateQaTest {
 		System.out.println(res.getMessage());
 	}
 	
+	@Test
+	public void splitTest() {
+		String a = "aa=";
+		String[] b = a.split("=");
+		for(String item : b) {
+			System.out.println(item);
+		}
+		System.out.println(b.length);
+	}
 }

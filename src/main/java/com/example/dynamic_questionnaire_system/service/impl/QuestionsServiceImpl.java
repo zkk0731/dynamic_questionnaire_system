@@ -1,4 +1,4 @@
-package com.example.dynamic_questionnaire.service.impl;
+package com.example.dynamic_questionnaire_system.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import com.example.dynamic_questionnaire.constants.RtnCode;
-import com.example.dynamic_questionnaire.entity.Questionnaire;
-import com.example.dynamic_questionnaire.entity.QuestionsAndAns;
-import com.example.dynamic_questionnaire.repository.QuestionnaireDao;
-import com.example.dynamic_questionnaire.repository.QuestionsAndAnsDao;
-import com.example.dynamic_questionnaire.service.ifs.QuestionsService;
-import com.example.dynamic_questionnaire.vo.QuestionsReq;
-import com.example.dynamic_questionnaire.vo.QuestionsRes;
+import com.example.dynamic_questionnaire_system.constants.RtnCode;
+import com.example.dynamic_questionnaire_system.entity.Questionnaire;
+import com.example.dynamic_questionnaire_system.entity.QuestionsAndAns;
+import com.example.dynamic_questionnaire_system.repository.QuestionnaireDao;
+import com.example.dynamic_questionnaire_system.repository.QuestionsAndAnsDao;
+import com.example.dynamic_questionnaire_system.service.ifs.QuestionsService;
+import com.example.dynamic_questionnaire_system.vo.QuestionsReq;
+import com.example.dynamic_questionnaire_system.vo.QuestionsRes;
 
 @Service
 public class QuestionsServiceImpl implements QuestionsService{
@@ -54,12 +54,12 @@ public class QuestionsServiceImpl implements QuestionsService{
 		if(req.getQaList() != null) {
 			//設定及檢查問答格式
 			res = setQaTitleAndSave(req.getQaList(), req.getTitle());
+			
+			if(res != null) {
+				return res;
+			}
 		}
-		
-		if(res != null) {
-			return res;
-		}
-		
+
 		return new QuestionsRes(RtnCode.SUCCESS.getMessage());
 	}
 	

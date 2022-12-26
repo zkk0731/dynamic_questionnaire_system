@@ -1,4 +1,4 @@
-package com.example.dynamic_questionnaire.vo;
+package com.example.dynamic_questionnaire_system.vo;
 
 public class AnsStatisticsReq {
 
