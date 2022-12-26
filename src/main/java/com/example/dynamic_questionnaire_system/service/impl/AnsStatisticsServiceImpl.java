@@ -27,6 +27,7 @@ public class AnsStatisticsServiceImpl implements AnsStatisticsService{
 	@Autowired
 	private QuestionsAndAnsDao questionsAndAnsDao;
 	
+	//統計答案
 	@Override
 	public AnsStatisticsRes statistics(AnsStatisticsReq req) {
 //		List<QuestionsAndAns> qaList = questionsAndAnsDao.findByQuestionnaireTitle(req.getQuestionnaireTitle());
@@ -46,6 +47,7 @@ public class AnsStatisticsServiceImpl implements AnsStatisticsService{
 		return res;
 	}
 
+	//將資料庫中的答案轉成map方便統計
 	private Map<String,Map<String,Integer>> statisticsFunction(List<String> usersAns) {
 //		List<QAndAStatistics> qaStatisticsList = new ArrayList<>();
 //		QAndAStatistics qaStatistics = new QAndAStatistics();
@@ -73,6 +75,7 @@ public class AnsStatisticsServiceImpl implements AnsStatisticsService{
 		return qaStatisticsMap;
 	}
 
+	//將值存入map中
 	private Map<String,Map<String,Integer>> mapPutStatistics(Map<String,Map<String,Integer>> qaStatisticsMap,
 			String ans, String question){
 		Map<String,Integer> ansStatisticsMap = new HashMap<>();

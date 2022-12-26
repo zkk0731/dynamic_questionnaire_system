@@ -2,6 +2,7 @@ package com.example.dynamic_questionnaire_system.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,7 @@ import com.example.dynamic_questionnaire_system.service.ifs.QuestionsService;
 import com.example.dynamic_questionnaire_system.vo.QuestionsReq;
 import com.example.dynamic_questionnaire_system.vo.QuestionsRes;
 
+@CrossOrigin
 @RestController
 public class QuestionnaireController {
 
