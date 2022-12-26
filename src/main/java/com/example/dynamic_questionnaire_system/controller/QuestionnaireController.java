@@ -91,4 +91,14 @@ public class QuestionnaireController {
 		
 		return questionsService.deleteQAndA(req);
 	}
+	
+	@PostMapping(value = "/search")
+	public QuestionsRes search(@RequestBody QuestionsReq req) {
+		
+		if(req.getStartTime().isAfter(req.getEndTime())) {
+			return new QuestionsRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
+		
+		return questionsService.search(req);
+	}
 }

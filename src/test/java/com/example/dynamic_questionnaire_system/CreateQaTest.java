@@ -129,4 +129,30 @@ public class CreateQaTest {
 		}
 		System.out.println(b.length);
 	}
+	
+	@Test
+	public void searchTest() {
+		QuestionsReq req = new QuestionsReq();
+//		req.setTitle("tes");
+		
+		String dateStr1 = "2022-10-01";
+		String dateStr2 = "2022-12-01";
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+		LocalDate date1 = LocalDate.parse(dateStr1,format);
+		LocalDate date2 = LocalDate.parse(dateStr2,format);
+		
+		req.setStartTime(date1);
+		req.setEndTime(date2);
+		
+		QuestionsRes res = questionsService.search(req);
+		System.out.println(res.getMessage());
+		
+		List<Questionnaire> result = res.getQuestionnaireList();
+		if(result != null) {
+			for(Questionnaire item : result) {
+				System.out.println(item.getTitle() + " " + item.getStartTime() +" "+item.getEndTime());
+			}
+		}
+	}
 }

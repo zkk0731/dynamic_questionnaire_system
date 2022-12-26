@@ -34,4 +34,13 @@ public class StatisticsController {
 	public AnsStatisticsRes readAllUsers() {
 		return ansStatisticsService.readAllUsers();
 	}
+	
+	@PostMapping(value = "/read_user_info")
+	public AnsStatisticsRes readUserInfo(@RequestBody AnsStatisticsReq req) {
+		
+		if(req.getUsersId() == 0) {
+			return new AnsStatisticsRes(RtnCode.PARAMETER_REQUIRED.getMessage());
+		}
+		return ansStatisticsService.readUsersInfo(req);
+	}
 }

@@ -198,14 +198,83 @@ public class QuestionsServiceImpl implements QuestionsService{
 		List<Questionnaire> result = new ArrayList<>();
 		int caseInt = searchParamCheck(req);
 		switch (caseInt) {
-		case 0:
-			result = questionnaireDao.findAll();
+			case 0:
+				result = questionnaireDao.findAll();
+				break;
 			
-			break;
-
-		
+			case 1:
+				result = questionnaireDao.findByTitleContaining(req.getTitle());
+				break;
+			
+			case 2:
+				List<Questionnaire> questionnaireList1 = questionnaireDao.findByTitleContaining(req.getTitle());
+				for(Questionnaire item : questionnaireList1) {
+					if(item.getStartTime().isAfter(req.getStartTime()) ||
+							item.getStartTime().equals(req.getStartTime())) {
+						result.add(item);
+					}
+				}
+				break;
+			
+			case 3:
+				List<Questionnaire> questionnaireList2 = questionnaireDao.findByTitleContaining(req.getTitle());
+				for(Questionnaire item : questionnaireList2) {
+					if(item.getEndTime().isBefore(req.getEndTime()) ||
+							item.getEndTime().equals(req.getEndTime())) {
+						result.add(item);
+					}
+				}
+				break;
+				
+			case 4:
+				List<Questionnaire> questionnaireList3 = questionnaireDao.findByTitleContaining(req.getTitle());
+				for(Questionnaire item : questionnaireList3) {
+					if(!item.getEndTime().isAfter(req.getEndTime()) &&
+							!item.getStartTime().isBefore(req.getStartTime())
+							) {
+						result.add(item);
+					}
+				}
+				break;
+				
+			case 5:
+				List<Questionnaire> questionnaireList4 = questionnaireDao.findAll();
+				for(Questionnaire item : questionnaireList4) {
+					if(item.getStartTime().isAfter(req.getStartTime()) ||
+							item.getStartTime().equals(req.getStartTime())) {
+						result.add(item);
+					}
+				}
+				break;
+				
+			case 6:
+				List<Questionnaire> questionnaireList5 = questionnaireDao.findAll();
+				for(Questionnaire item : questionnaireList5) {
+					if(item.getEndTime().isBefore(req.getEndTime()) ||
+							item.getEndTime().equals(req.getEndTime())) {
+						result.add(item);
+					}
+				}
+				break;
+				
+			case 7:
+				List<Questionnaire> questionnaireList6 = questionnaireDao.findAll();
+				for(Questionnaire item : questionnaireList6) {
+					if(!item.getEndTime().isAfter(req.getEndTime()) &&
+							!item.getStartTime().isBefore(req.getStartTime())) {
+						result.add(item);
+					}
+				}
+				break;
 		}
-		return null;
+		
+		if(CollectionUtils.isEmpty(result)) {
+			return new QuestionsRes(RtnCode.NO_QUESTIONNAIRE.getMessage());
+		}
+		
+		res.setQuestionnaireList(result);
+		res.setMessage(RtnCode.SUCCESS.getMessage());
+		return res;
 	}
 	
 	private int searchParamCheck(QuestionsReq req) {
