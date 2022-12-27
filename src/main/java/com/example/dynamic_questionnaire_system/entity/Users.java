@@ -22,7 +22,7 @@ public class Users {
 	private String name;
 	
 	@Column(name = "phone")
-	private int phone;
+	private String phone;
 	
 	@Column(name = "email")
 	private String email;
@@ -46,6 +46,18 @@ public class Users {
 		
 	}
 	
+	public Users(String name, String phone, String email, int age, String userAns
+			, LocalDateTime finishTime, String questionnaireTitle, String gender) {
+		this.name = name;
+		this.phone = phone;
+		this.email = email;
+		this.age = age;
+		this.userAns = userAns;
+		this.finishTime = finishTime;
+		this.questionnaireTitle = questionnaireTitle;
+		this.gender = gender;
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -62,11 +74,11 @@ public class Users {
 		this.name = name;
 	}
 
-	public int getPhone() {
+	public String getPhone() {
 		return phone;
 	}
 
-	public void setPhone(int phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 

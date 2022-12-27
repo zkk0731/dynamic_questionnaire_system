@@ -1,6 +1,7 @@
 package com.example.dynamic_questionnaire_system.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import com.example.dynamic_questionnaire_system.constants.RtnCode;
 import com.example.dynamic_questionnaire_system.service.ifs.QuestionsService;
 import com.example.dynamic_questionnaire_system.vo.QuestionsReq;
 import com.example.dynamic_questionnaire_system.vo.QuestionsRes;
+import com.example.dynamic_questionnaire_system.vo.WriteQuestionnaireReq;
 
 @CrossOrigin
 @RestController
@@ -111,5 +113,23 @@ public class QuestionnaireController {
 		}
 		
 		return questionsService.checkTitleDuplicate(req);
+	}
+	
+	//寫問卷
+	@PostMapping(value = "/write_questionnaire")
+	public QuestionsRes writeQuestionnaire(@RequestBody WriteQuestionnaireReq req) {
+		
+		if(!StringUtils.hasText(req.getName()) ||
+				!StringUtils.hasText(req.getPhone()) ||
+				!StringUtils.hasText(req.getEmail()) ||
+				req.getAge() == 0 ||
+				CollectionUtils.isEmpty(req.getUserAns()) ||
+				req.getFinishTime() == null ||
+				!StringUtils.hasText(req.getQuestionnaireTitle()) ||
+				!StringUtils.hasText(req.getGender())) {
+			return new QuestionsRes(RtnCode.PARAMETER_REQUIRED.getMessage());
+		}
+		
+		return questionsService.writeQuestionnaire(req);
 	}
 }

@@ -17,11 +17,14 @@ import org.springframework.util.StringUtils;
 import com.example.dynamic_questionnaire_system.constants.RtnCode;
 import com.example.dynamic_questionnaire_system.entity.Questionnaire;
 import com.example.dynamic_questionnaire_system.entity.QuestionsAndAns;
+import com.example.dynamic_questionnaire_system.entity.Users;
 import com.example.dynamic_questionnaire_system.repository.QuestionnaireDao;
 import com.example.dynamic_questionnaire_system.repository.QuestionsAndAnsDao;
+import com.example.dynamic_questionnaire_system.repository.UsersDao;
 import com.example.dynamic_questionnaire_system.service.ifs.QuestionsService;
 import com.example.dynamic_questionnaire_system.vo.QuestionsReq;
 import com.example.dynamic_questionnaire_system.vo.QuestionsRes;
+import com.example.dynamic_questionnaire_system.vo.WriteQuestionnaireReq;
 
 @Service
 public class QuestionsServiceImpl implements QuestionsService{
@@ -32,6 +35,9 @@ public class QuestionsServiceImpl implements QuestionsService{
 	
 	@Autowired
 	private QuestionsAndAnsDao questionsAndAnsDao;
+	
+	@Autowired
+	private UsersDao usersDao;
 	
 	@Override
 	@Transactional
@@ -362,4 +368,36 @@ public class QuestionsServiceImpl implements QuestionsService{
 		return new QuestionsRes(RtnCode.SUCCESS.getMessage());
 	}
 
+	//填寫問卷
+	@Override
+	public QuestionsRes writeQuestionnaire(WriteQuestionnaireReq req) {
+		
+		QuestionsRes check = checkWriteQuestionnaireParam(req);
+		if(check != null) {
+			return check;
+		}
+		
+		Map<String, String> ansMap = req.getUserAns();
+		String ansString = ansMap.toString().substring(1, ansMap.toString().length() - 1);
+		Users users = new Users(req.getName(), req.getPhone(), req.getEmail(), req.getAge(),
+				ansString, req.getFinishTime(), req.getQuestionnaireTitle(), req.getGender());
+		
+		usersDao.save(users);
+		return new QuestionsRes(RtnCode.SUCCESS.getMessage());
+	}
+
+	private QuestionsRes checkWriteQuestionnaireParam(WriteQuestionnaireReq req) {
+
+		String phonePattern = "09\\d{8}";
+		String emailPattern = "[A-za-z0-9]+@[A-za-z0-9]+\\.com";
+		
+		if(!req.getEmail().matches(emailPattern) ||
+				!req.getPhone().matches(phonePattern) ||
+				req.getAge() <= 0) {
+			return new QuestionsRes(RtnCode.PARAMETER_ERROR.getMessage());
+		}
+		
+		 return null;
+	}
+	
 }

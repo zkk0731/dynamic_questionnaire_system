@@ -18,6 +18,7 @@ import com.example.dynamic_questionnaire_system.entity.QuestionsAndAns;
 import com.example.dynamic_questionnaire_system.service.ifs.QuestionsService;
 import com.example.dynamic_questionnaire_system.vo.QuestionsReq;
 import com.example.dynamic_questionnaire_system.vo.QuestionsRes;
+import com.example.dynamic_questionnaire_system.vo.WriteQuestionnaireReq;
 
 @SpringBootTest
 public class CreateQaTest {
@@ -72,8 +73,8 @@ public class CreateQaTest {
 		qa2.setId(6);
 		QuestionsAndAns qa3 = new QuestionsAndAns("q16","b;b;b",false,false);
 		qa3.setId(7);
-		QuestionsAndAns qa4 = new QuestionsAndAns("q13","b;b;b",false,false);
-		QuestionsAndAns qa5 = new QuestionsAndAns("q14","a;c;d",false,false);
+		QuestionsAndAns qa4 = new QuestionsAndAns("q17","b;b;b",false,false);
+		QuestionsAndAns qa5 = new QuestionsAndAns("q17","a;c;d",false,false);
 		List<QuestionsAndAns> qaList = Arrays.asList(qa1,qa2,qa3,qa4,qa5);
 		req.setQaList(qaList);
 		
@@ -157,4 +158,37 @@ public class CreateQaTest {
 			}
 		}
 	}
+	
+	@Test
+	public void listToString() {
+		Map<String,String> map = new HashMap<>();
+		map.put("q1", "a1");
+		map.put("q2", "a2");
+		
+		List<String> abc = Arrays.asList("a","b","c");
+		System.out.println(abc.toString());
+		System.out.println(map.toString());
+	}
+	
+	@Test
+	public void writeTest() {
+		WriteQuestionnaireReq req = new WriteQuestionnaireReq();
+		
+		req.setName("mike");
+		req.setPhone("0912345678");
+		req.setEmail("mike@gmail.com");
+		req.setAge(33);
+		req.setFinishTime(LocalDateTime.now());
+		req.setGender("男");
+		req.setQuestionnaireTitle("test3");
+		
+		Map<String, String>ansMap = new HashMap<>();
+		ansMap.put("q1", "a1");
+		ansMap.put("q2", "a3;a4");
+		
+		req.setUserAns(ansMap);
+		QuestionsRes res = questionsService.writeQuestionnaire(req);
+		System.out.println(res.getMessage());
+	}
+	
 }

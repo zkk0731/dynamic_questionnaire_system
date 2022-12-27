@@ -2,6 +2,7 @@ package com.example.dynamic_questionnaire_system.service.ifs;
 
 import com.example.dynamic_questionnaire_system.vo.QuestionsReq;
 import com.example.dynamic_questionnaire_system.vo.QuestionsRes;
+import com.example.dynamic_questionnaire_system.vo.WriteQuestionnaireReq;
 
 public interface QuestionsService {
 	
@@ -27,6 +28,9 @@ public interface QuestionsService {
 	//搜尋
 	public QuestionsRes search(QuestionsReq req);
 	
-	
+	//確認是否重複問卷名稱
 	public QuestionsRes checkTitleDuplicate(QuestionsReq req);
+	
+	
+	public QuestionsRes writeQuestionnaire(WriteQuestionnaireReq req);
 }
