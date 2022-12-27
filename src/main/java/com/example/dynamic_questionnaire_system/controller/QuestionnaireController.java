@@ -92,6 +92,7 @@ public class QuestionnaireController {
 		return questionsService.deleteQAndA(req);
 	}
 	
+	//搜尋
 	@PostMapping(value = "/search")
 	public QuestionsRes search(@RequestBody QuestionsReq req) {
 		
@@ -100,5 +101,15 @@ public class QuestionnaireController {
 		}
 		
 		return questionsService.search(req);
+	}
+	
+	//確認問卷名稱是否重複
+	@PostMapping(value = "/check_title_duplicate")
+	public QuestionsRes checkTitleDuplicate(@RequestBody QuestionsReq req) {
+		if(!StringUtils.hasText(req.getTitle())) {
+			return new QuestionsRes(RtnCode.PARAMETER_REQUIRED.getMessage());
+		}
+		
+		return questionsService.checkTitleDuplicate(req);
 	}
 }

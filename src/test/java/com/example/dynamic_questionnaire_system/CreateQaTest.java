@@ -66,14 +66,16 @@ public class CreateQaTest {
 		req.setTitle("new Test424");
 		req.setDescription("For new test424");
 		
-//		QuestionsAndAns qa1 = new QuestionsAndAns("Test4","q4","b;b",true,false);
-//		qa1.setId(5);
-//		QuestionsAndAns qa2 = new QuestionsAndAns("Test4","q5","b;b",false,false);
-//		qa2.setId(6);
-//		QuestionsAndAns qa3 = new QuestionsAndAns("Test4","q6","b;b;b",false,false);
-//		qa3.setId(7);
-//		List<QuestionsAndAns> qaList = Arrays.asList(qa1,qa2,qa3);
-//		req.setQaList(qaList);
+		QuestionsAndAns qa1 = new QuestionsAndAns("q4","===;b11",true,false);
+		qa1.setId(5);
+		QuestionsAndAns qa2 = new QuestionsAndAns("q15","b456;b",false,false);
+		qa2.setId(6);
+		QuestionsAndAns qa3 = new QuestionsAndAns("q16","b;b;b",false,false);
+		qa3.setId(7);
+		QuestionsAndAns qa4 = new QuestionsAndAns("q13","b;b;b",false,false);
+		QuestionsAndAns qa5 = new QuestionsAndAns("q14","a;c;d",false,false);
+		List<QuestionsAndAns> qaList = Arrays.asList(qa1,qa2,qa3,qa4,qa5);
+		req.setQaList(qaList);
 		
 		String dateStr1 = "2022-11-01";
 		String dateStr2 = "2022-11-20";

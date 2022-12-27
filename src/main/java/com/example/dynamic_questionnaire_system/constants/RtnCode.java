@@ -3,6 +3,7 @@ package com.example.dynamic_questionnaire_system.constants;
 public enum RtnCode {
 	SUCCESS("200","Success"),
 	TITLE_ALREADY_EXIST("403","問卷名稱已存在"),
+	QUESTION_EXIST("403","問題已存在"),
 	TITLE_NOT_EXIST("403","問卷名稱不存在"),
 	QA_NOT_EXIST("200","問答不存在"),
 	PARAMETER_REQUIRED("403","所需資料缺失"),

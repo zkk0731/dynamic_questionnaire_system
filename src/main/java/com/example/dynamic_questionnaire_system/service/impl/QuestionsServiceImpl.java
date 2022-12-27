@@ -1,8 +1,10 @@
 package com.example.dynamic_questionnaire_system.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -49,8 +51,6 @@ public class QuestionsServiceImpl implements QuestionsService{
 				req.getEndTime());
 		
 		
-		questionnaireDao.save(questionnaireList);
-		
 		if(req.getQaList() != null) {
 			//設定及檢查問答格式
 			res = setQaTitleAndSave(req.getQaList(), req.getTitle());
@@ -60,6 +60,7 @@ public class QuestionsServiceImpl implements QuestionsService{
 			}
 		}
 
+		questionnaireDao.save(questionnaireList);
 		return new QuestionsRes(RtnCode.SUCCESS.getMessage());
 	}
 	
@@ -97,10 +98,10 @@ public class QuestionsServiceImpl implements QuestionsService{
 
 	//更新問卷
 	@Override
-	@Transactional
 	public QuestionsRes updateQuestionnaire(QuestionsReq req) {
 		Optional<Questionnaire> questionnaireOp = questionnaireDao.findById(req.getQuestionnaireId());
 		
+		//判斷問卷是否存在
 		if(!questionnaireOp.isPresent()) {
 			return new QuestionsRes(RtnCode.NO_QUESTIONNAIRE.getMessage());
 		}
@@ -116,30 +117,62 @@ public class QuestionsServiceImpl implements QuestionsService{
 		
 		List<QuestionsAndAns> oldQa = questionsAndAnsDao.findByQuestionnaireTitle(oldTitle);
 		
+		//更新問卷
 		updateQaList = updateQa(oldQa,updateQaList, req.getTitle());
 		
-		questionnaireDao.save(questionnaire);
-		questionsAndAnsDao.saveAll(updateQaList);
+		//新增重複問題擋掉
+		if(updateQaList == null) {
+			return new QuestionsRes(RtnCode.QUESTION_EXIST.getMessage());
+		}
+		
+		saveDb(updateQaList,questionnaire);
+//		questionsAndAnsDao.saveAll(updateQaList);
+//		questionnaireDao.save(questionnaire);
 		return new QuestionsRes(RtnCode.SUCCESS.getMessage());
 	}
 
+	@Transactional
+	public void saveDb(List<QuestionsAndAns> updateQaList, Questionnaire questionnaire) {
+		questionsAndAnsDao.saveAll(updateQaList);
+		questionnaireDao.save(questionnaire);
+	}
+	
 	//更新QA
 	private List<QuestionsAndAns> updateQa(List<QuestionsAndAns> oldQa, List<QuestionsAndAns> updateQaList, String newTitle) {
+		List<QuestionsAndAns> addNewQuestion = new ArrayList<>();
+		Map<String,QuestionsAndAns> addNewQuestionMap = new HashMap<>();
+		
 		for(QuestionsAndAns item : oldQa) {
 			item.setQuestionnaireTitle(newTitle);
+			addNewQuestionMap = new HashMap<>();
 			if(updateQaList != null) {
 				for(QuestionsAndAns item2 : updateQaList) {
+					
 					if(item.getId() == item2.getId()){
 					
 						item.setQuestions(item2.getQuestions());
 						item.setAns(item2.getAns());
 						item.setOneOrMany(item2.isOneOrMany());
 						item.setNecessary(item2.isNecessary());
+						addNewQuestionMap.remove(item2.getQuestions());
 						break;
+					}else if(addNewQuestionMap.containsKey(item2.getQuestions()) ||
+							addNewQuestionMap.containsKey(item.getQuestions())
+							){
+						return null;
+					}else {
+						item2.setQuestionnaireTitle(newTitle);
+						addNewQuestionMap.put(item2.getQuestions(), item2);
 					}
 				}
 			}
 		}
+		
+		for(Entry<String, QuestionsAndAns> item3:addNewQuestionMap.entrySet()) {
+			
+			oldQa.add(item3.getValue());
+		}
+		
 		return oldQa;
 	}
 
@@ -315,6 +348,18 @@ public class QuestionsServiceImpl implements QuestionsService{
 			return 7;
 		}
 		return 0;
+	}
+
+	//確認標題是否重複
+	@Override
+	public QuestionsRes checkTitleDuplicate(QuestionsReq req) {
+		Questionnaire questionnaireList = questionnaireDao.findByTitle(req.getTitle());
+		
+		//判斷問卷名稱是否存在
+		if(questionnaireList != null) {
+			return new QuestionsRes(RtnCode.TITLE_ALREADY_EXIST.getMessage());
+		}
+		return new QuestionsRes(RtnCode.SUCCESS.getMessage());
 	}
 
 }

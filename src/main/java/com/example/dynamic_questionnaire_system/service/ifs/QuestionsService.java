@@ -26,4 +26,7 @@ public interface QuestionsService {
 	
 	//搜尋
 	public QuestionsRes search(QuestionsReq req);
+	
+	
+	public QuestionsRes checkTitleDuplicate(QuestionsReq req);
 }
