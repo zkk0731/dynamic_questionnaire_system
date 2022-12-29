@@ -94,9 +94,9 @@ public class CreateQaTest {
 	
 	@Test
 	public void deleteQuestionnaire() {
-		List<Integer> idList = Arrays.asList(13,14);
+		List<String> idList = Arrays.asList("Test5","Test6");
 		QuestionsReq req = new QuestionsReq();
-		req.setQuestionnaireIdList(idList);
+		req.setTitleList(idList);
 		QuestionsRes res = questionsService.deleteQuestionnaire(req);
 		System.out.println(res.getMessage());
 		
@@ -117,7 +117,7 @@ public class CreateQaTest {
 	@Test
 	public void deleteQa() {
 		QuestionsReq req = new QuestionsReq();
-		List<Integer> idList = Arrays.asList(42,43);
+		List<Integer> idList = Arrays.asList(52,53);
 		req.setQaIdList(idList);
 		QuestionsRes res = questionsService.deleteQAndA(req);
 		System.out.println(res.getMessage());
@@ -136,17 +136,17 @@ public class CreateQaTest {
 	@Test
 	public void searchTest() {
 		QuestionsReq req = new QuestionsReq();
-//		req.setTitle("tes");
+//		req.setTitle("t");
 		
-		String dateStr1 = "2022-10-01";
+		String dateStr1 = "2022-11-01";
 		String dateStr2 = "2022-12-01";
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 		LocalDate date1 = LocalDate.parse(dateStr1,format);
 		LocalDate date2 = LocalDate.parse(dateStr2,format);
 		
-		req.setStartTime(date1);
-		req.setEndTime(date2);
+//		req.setStartTime(date1);
+//		req.setEndTime(date2);
 		
 		QuestionsRes res = questionsService.search(req);
 		System.out.println(res.getMessage());

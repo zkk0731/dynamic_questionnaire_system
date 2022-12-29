@@ -27,6 +27,8 @@ public class QuestionsReq {
 	
 	private List<Integer> QaIdList;
 	
+	private List<String> titleList;
+	
 	private String questions;
 	
 	private String ans;
@@ -133,6 +135,14 @@ public class QuestionsReq {
 
 	public void setQaIdList(List<Integer> qaIdList) {
 		QaIdList = qaIdList;
+	}
+
+	public List<String> getTitleList() {
+		return titleList;
+	}
+
+	public void setTitleList(List<String> titleList) {
+		this.titleList = titleList;
 	}
 	
 	

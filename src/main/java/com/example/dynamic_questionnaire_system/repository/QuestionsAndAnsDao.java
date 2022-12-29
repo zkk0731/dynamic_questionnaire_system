@@ -20,4 +20,8 @@ public interface QuestionsAndAnsDao extends JpaRepository<QuestionsAndAns, Integ
 	@Transactional
 	@Modifying
 	public void deleteByQuestionnaireTitleIn(List<String> questionnaireTitleList);
+	
+	@Transactional
+	@Modifying
+	public void deleteByIdIn(List<Integer> ids);
 }

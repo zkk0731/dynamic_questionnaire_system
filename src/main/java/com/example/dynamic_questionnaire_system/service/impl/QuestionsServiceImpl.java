@@ -1,5 +1,6 @@
 package com.example.dynamic_questionnaire_system.service.impl;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,14 +44,14 @@ public class QuestionsServiceImpl implements QuestionsService{
 	@Transactional
 	public QuestionsRes createQuestionnaire(QuestionsReq req) {
 		QuestionsRes res = new QuestionsRes();
-		Questionnaire questionnaireList = questionnaireDao.findByTitle(req.getTitle());
+//		Questionnaire questionnaireList = questionnaireDao.findByTitle(req.getTitle());
 		
 		//判斷問卷名稱是否存在
-		if(questionnaireList != null) {
+		if(!questionnaireDao.existsByTitle(req.getTitle())) {
 			return new QuestionsRes(RtnCode.TITLE_ALREADY_EXIST.getMessage());
 		}
 		
-		questionnaireList = new Questionnaire(
+		Questionnaire questionnaireList = new Questionnaire(
 				req.getTitle(),
 				req.getDescription(),
 				req.getStartTime(),
@@ -85,6 +86,7 @@ public class QuestionsServiceImpl implements QuestionsService{
 			
 			item.setQuestionnaireTitle(questionnaireTitle);
 		}
+		
 		questionsAndAnsDao.saveAll(qaList);
 		return null;
 	}
@@ -93,7 +95,9 @@ public class QuestionsServiceImpl implements QuestionsService{
 	@Override
 	public QuestionsRes readAllQuestionnaire() {
 		List<Questionnaire> result = questionnaireDao.findAll();
-		if(result == null) {
+		
+		//判斷DB裡是否有問卷
+		if(CollectionUtils.isEmpty(result)) {
 			return new QuestionsRes(RtnCode.NO_QUESTIONNAIRE.getMessage());
 		}
 		
@@ -111,19 +115,20 @@ public class QuestionsServiceImpl implements QuestionsService{
 		if(!questionnaireOp.isPresent()) {
 			return new QuestionsRes(RtnCode.NO_QUESTIONNAIRE.getMessage());
 		}
+		
 		Questionnaire questionnaire = questionnaireOp.get();
 		String oldTitle = questionnaire.getTitle();
 		
+		//將問卷資料更新
 		questionnaire.setTitle(req.getTitle());
 		questionnaire.setDescription(req.getDescription());
 		questionnaire.setStartTime(req.getStartTime());
 		questionnaire.setEndTime(req.getEndTime());
 		
 		List<QuestionsAndAns> updateQaList = req.getQaList();
-		
 		List<QuestionsAndAns> oldQa = questionsAndAnsDao.findByQuestionnaireTitle(oldTitle);
 		
-		//更新問卷
+		//更新問卷 舊的值改成新的值 問題重複會回傳null
 		updateQaList = updateQa(oldQa,updateQaList, req.getTitle());
 		
 		//新增重複問題擋掉
@@ -132,11 +137,11 @@ public class QuestionsServiceImpl implements QuestionsService{
 		}
 		
 		saveDb(updateQaList,questionnaire);
-//		questionsAndAnsDao.saveAll(updateQaList);
-//		questionnaireDao.save(questionnaire);
+		
 		return new QuestionsRes(RtnCode.SUCCESS.getMessage());
 	}
 
+	//存進資料庫
 	@Transactional
 	public void saveDb(List<QuestionsAndAns> updateQaList, Questionnaire questionnaire) {
 		questionsAndAnsDao.saveAll(updateQaList);
@@ -145,28 +150,38 @@ public class QuestionsServiceImpl implements QuestionsService{
 	
 	//更新QA
 	private List<QuestionsAndAns> updateQa(List<QuestionsAndAns> oldQa, List<QuestionsAndAns> updateQaList, String newTitle) {
-		List<QuestionsAndAns> addNewQuestion = new ArrayList<>();
 		Map<String,QuestionsAndAns> addNewQuestionMap = new HashMap<>();
 		
 		for(QuestionsAndAns item : oldQa) {
+			
+			//所有題目title改成新的
 			item.setQuestionnaireTitle(newTitle);
 			addNewQuestionMap = new HashMap<>();
-			if(updateQaList != null) {
+			
+			if(!CollectionUtils.isEmpty(updateQaList)) {
 				for(QuestionsAndAns item2 : updateQaList) {
 					
-					if(item.getId() == item2.getId()){
+					//判斷問題是否重複
+					if(addNewQuestionMap.containsKey(item2.getQuestions()) ||
+							addNewQuestionMap.containsKey(item.getQuestions())){
+						return null;
+						
+					}
 					
+					//找到對應ID題目進行更新
+					else if(item.getId() == item2.getId()){
+		
 						item.setQuestions(item2.getQuestions());
 						item.setAns(item2.getAns());
 						item.setOneOrMany(item2.isOneOrMany());
 						item.setNecessary(item2.isNecessary());
+						
+						//因為是原有的問題更新 將他從map拿掉
 						addNewQuestionMap.remove(item2.getQuestions());
 						break;
-					}else if(addNewQuestionMap.containsKey(item2.getQuestions()) ||
-							addNewQuestionMap.containsKey(item.getQuestions())
-							){
-						return null;
 					}else {
+						
+						//問題放入map
 						item2.setQuestionnaireTitle(newTitle);
 						addNewQuestionMap.put(item2.getQuestions(), item2);
 					}
@@ -174,8 +189,8 @@ public class QuestionsServiceImpl implements QuestionsService{
 			}
 		}
 		
+		//map裡有新增的題目 加進原有的問題list
 		for(Entry<String, QuestionsAndAns> item3:addNewQuestionMap.entrySet()) {
-			
 			oldQa.add(item3.getValue());
 		}
 		
@@ -187,20 +202,11 @@ public class QuestionsServiceImpl implements QuestionsService{
 	@Transactional
 	@Override
 	public QuestionsRes deleteQuestionnaire(QuestionsReq req) {
-		List<Questionnaire> resultList = questionnaireDao.findAllById(req.getQuestionnaireIdList());
 		
-		if(CollectionUtils.isEmpty(resultList)) {
-			return new QuestionsRes(RtnCode.TITLE_NOT_EXIST.getMessage());
-		}
+		//刪除此title的問卷 包含題目
+		questionsAndAnsDao.deleteByQuestionnaireTitleIn(req.getTitleList());
+		questionnaireDao.deleteByTitleIn(req.getTitleList());
 		
-		List<String> titleList = new ArrayList<>();
-		
-		for(Questionnaire item : resultList) {
-			titleList.add(item.getTitle());
-		}
-
-		questionsAndAnsDao.deleteByQuestionnaireTitleIn(titleList);
-		questionnaireDao.deleteAll(resultList);
 		return new QuestionsRes(RtnCode.SUCCESS.getMessage());
 	}
 
@@ -208,15 +214,21 @@ public class QuestionsServiceImpl implements QuestionsService{
 	@Override
 	public QuestionsRes readQaByQuestionnaireTitle(QuestionsReq req) {
 		Optional<Questionnaire> resultOp = questionnaireDao.findById(req.getQuestionnaireId());
+		
+		//判斷問卷是否存在
 		if(!resultOp.isPresent()) {
 			return new QuestionsRes(RtnCode.TITLE_NOT_EXIST.getMessage());
 		}
 
+		//從DB取出該問卷所有題目
 		List<QuestionsAndAns> qaList = questionsAndAnsDao.findByQuestionnaireTitle(resultOp.get().getTitle());
+		
+		//沒題目回傳訊息
 		if(CollectionUtils.isEmpty(qaList)) {
 			return new QuestionsRes(RtnCode.QA_NOT_EXIST.getMessage());
 		}
 		
+		//回傳取得的題目
 		QuestionsRes res = new QuestionsRes();
 		res.setQaList(qaList);
 		return res;
@@ -226,87 +238,26 @@ public class QuestionsServiceImpl implements QuestionsService{
 	@Override
 	@Transactional
 	public QuestionsRes deleteQAndA(QuestionsReq req) {
-		questionsAndAnsDao.deleteAllById(req.getQaIdList());
+		
+		//由題目ID來刪除
+//		questionsAndAnsDao.de
+		questionsAndAnsDao.deleteByIdIn(req.getQaIdList());
 		return new QuestionsRes(RtnCode.SUCCESS.getMessage());
 	}
 
 	//搜尋
 	@Override
 	public QuestionsRes search(QuestionsReq req) {
+		String searchText = StringUtils.hasText(req.getTitle()) ? req.getTitle() : "";
+		LocalDate startDate = req.getStartTime() == null ? LocalDate.of(1970, 1, 1) : req.getStartTime();
+		LocalDate endDate = req.getEndTime() == null ? LocalDate.of(2999, 1, 1) : req.getEndTime();
+		
 		QuestionsRes res = new QuestionsRes();
 		List<Questionnaire> result = new ArrayList<>();
-		int caseInt = searchParamCheck(req);
-		switch (caseInt) {
-			case 0:
-				result = questionnaireDao.findAll();
-				break;
-			
-			case 1:
-				result = questionnaireDao.findByTitleContaining(req.getTitle());
-				break;
-			
-			case 2:
-				List<Questionnaire> questionnaireList1 = questionnaireDao.findByTitleContaining(req.getTitle());
-				for(Questionnaire item : questionnaireList1) {
-					if(item.getStartTime().isAfter(req.getStartTime()) ||
-							item.getStartTime().equals(req.getStartTime())) {
-						result.add(item);
-					}
-				}
-				break;
-			
-			case 3:
-				List<Questionnaire> questionnaireList2 = questionnaireDao.findByTitleContaining(req.getTitle());
-				for(Questionnaire item : questionnaireList2) {
-					if(item.getEndTime().isBefore(req.getEndTime()) ||
-							item.getEndTime().equals(req.getEndTime())) {
-						result.add(item);
-					}
-				}
-				break;
-				
-			case 4:
-				List<Questionnaire> questionnaireList3 = questionnaireDao.findByTitleContaining(req.getTitle());
-				for(Questionnaire item : questionnaireList3) {
-					if(!item.getEndTime().isAfter(req.getEndTime()) &&
-							!item.getStartTime().isBefore(req.getStartTime())
-							) {
-						result.add(item);
-					}
-				}
-				break;
-				
-			case 5:
-				List<Questionnaire> questionnaireList4 = questionnaireDao.findAll();
-				for(Questionnaire item : questionnaireList4) {
-					if(item.getStartTime().isAfter(req.getStartTime()) ||
-							item.getStartTime().equals(req.getStartTime())) {
-						result.add(item);
-					}
-				}
-				break;
-				
-			case 6:
-				List<Questionnaire> questionnaireList5 = questionnaireDao.findAll();
-				for(Questionnaire item : questionnaireList5) {
-					if(item.getEndTime().isBefore(req.getEndTime()) ||
-							item.getEndTime().equals(req.getEndTime())) {
-						result.add(item);
-					}
-				}
-				break;
-				
-			case 7:
-				List<Questionnaire> questionnaireList6 = questionnaireDao.findAll();
-				for(Questionnaire item : questionnaireList6) {
-					if(!item.getEndTime().isAfter(req.getEndTime()) &&
-							!item.getStartTime().isBefore(req.getStartTime())) {
-						result.add(item);
-					}
-				}
-				break;
-		}
+		result = questionnaireDao.findByTitleContainingAndStartTimeGreaterThanEqualAndEndTimeLessThanEqual(searchText, startDate, endDate);
 		
+		
+		//篩選後沒得到結果回傳訊息
 		if(CollectionUtils.isEmpty(result)) {
 			return new QuestionsRes(RtnCode.NO_QUESTIONNAIRE.getMessage());
 		}
@@ -316,55 +267,16 @@ public class QuestionsServiceImpl implements QuestionsService{
 		return res;
 	}
 	
-	private int searchParamCheck(QuestionsReq req) {
-		//指輸入文字
-		if(StringUtils.hasText(req.getTitle()) 
-				&& req.getStartTime() == null 
-				&& req.getEndTime() == null) {
-			return 1;
-		}//輸入文字跟開始時間
-		else if(StringUtils.hasText(req.getTitle()) 
-				&& req.getStartTime() != null 
-				&& req.getEndTime() == null) {
-			return 2;
-		}//輸入文字跟結束時間
-		else if(StringUtils.hasText(req.getTitle()) 
-				&& req.getStartTime() == null 
-				&& req.getEndTime() != null) {
-			return 3;
-		}//輸入文字跟開始結束時間
-		else if(StringUtils.hasText(req.getTitle()) 
-				&& req.getStartTime() != null 
-				&& req.getEndTime() != null) {
-			return 4;
-		}//只輸入開始時間
-		else if(!StringUtils.hasText(req.getTitle()) 
-				&& req.getStartTime() != null 
-				&& req.getEndTime() == null) {
-			return 5;
-		}//只輸入結束時間
-		else if(!StringUtils.hasText(req.getTitle()) 
-				&& req.getStartTime() == null 
-				&& req.getEndTime() != null) {
-			return 6;
-		}//輸入開始結束時間
-		else if(!StringUtils.hasText(req.getTitle()) 
-				&& req.getStartTime() != null 
-				&& req.getEndTime() != null) {
-			return 7;
-		}
-		return 0;
-	}
 
 	//確認標題是否重複
 	@Override
 	public QuestionsRes checkTitleDuplicate(QuestionsReq req) {
-		Questionnaire questionnaireList = questionnaireDao.findByTitle(req.getTitle());
 		
 		//判斷問卷名稱是否存在
-		if(questionnaireList != null) {
+		if(questionnaireDao.existsByTitle(req.getTitle())) {
 			return new QuestionsRes(RtnCode.TITLE_ALREADY_EXIST.getMessage());
 		}
+		
 		return new QuestionsRes(RtnCode.SUCCESS.getMessage());
 	}
 
@@ -372,20 +284,25 @@ public class QuestionsServiceImpl implements QuestionsService{
 	@Override
 	public QuestionsRes writeQuestionnaire(WriteQuestionnaireReq req) {
 		
+		//判斷使用者填寫格式是否正確
 		QuestionsRes check = checkWriteQuestionnaireParam(req);
 		if(check != null) {
 			return check;
 		}
 		
+		//將使用者填寫的問卷map轉乘String存入DB
 		Map<String, String> ansMap = req.getUserAns();
 		String ansString = ansMap.toString().substring(1, ansMap.toString().length() - 1);
+		
 		Users users = new Users(req.getName(), req.getPhone(), req.getEmail(), req.getAge(),
 				ansString, req.getFinishTime(), req.getQuestionnaireTitle(), req.getGender());
 		
+		//所有資料存入DB
 		usersDao.save(users);
 		return new QuestionsRes(RtnCode.SUCCESS.getMessage());
 	}
 
+	//判斷電話 信箱 年齡格式
 	private QuestionsRes checkWriteQuestionnaireParam(WriteQuestionnaireReq req) {
 
 		String phonePattern = "09\\d{8}";
@@ -397,7 +314,7 @@ public class QuestionsServiceImpl implements QuestionsService{
 			return new QuestionsRes(RtnCode.PARAMETER_ERROR.getMessage());
 		}
 		
-		 return null;
+		return null;
 	}
 	
 }
