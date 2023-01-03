@@ -67,7 +67,7 @@ public class QuestionnaireController {
 	//req 需有QuestionnaireIdList
 	@PostMapping(value = "/delete_questionnaire")
 	public QuestionsRes deleteeQuestionnaire(@RequestBody QuestionsReq req) {
-		if(req.getQuestionnaireIdList() == null) {
+		if(req.getTitleList() == null) {
 			return new QuestionsRes(RtnCode.NO_DELETED_QUESTIONNAIRE.getMessage());
 		}
 		return questionsService.deleteQuestionnaire(req);
