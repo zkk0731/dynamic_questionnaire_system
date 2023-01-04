@@ -220,6 +220,7 @@ public class QuestionsServiceImpl implements QuestionsService{
 			return new QuestionsRes(RtnCode.TITLE_NOT_EXIST.getMessage());
 		}
 
+		Questionnaire questionnaire = resultOp.get();
 		//從DB取出該問卷所有題目
 		List<QuestionsAndAns> qaList = questionsAndAnsDao.findByQuestionnaireTitle(resultOp.get().getTitle());
 		
@@ -230,6 +231,8 @@ public class QuestionsServiceImpl implements QuestionsService{
 		
 		//回傳取得的題目
 		QuestionsRes res = new QuestionsRes();
+		res.setTitle(questionnaire.getTitle());
+		res.setDescription(questionnaire.getDescription());
 		res.setQaList(qaList);
 		return res;
 	}
