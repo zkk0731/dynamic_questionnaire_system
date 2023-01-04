@@ -98,7 +98,9 @@ public class QuestionnaireController {
 	@PostMapping(value = "/search")
 	public QuestionsRes search(@RequestBody QuestionsReq req) {
 		
-		if(req.getStartTime().isAfter(req.getEndTime())) {
+		if(req.getStartTime() != null && 
+				req.getEndTime() != null &&
+				req.getStartTime().isAfter(req.getEndTime())) {
 			return new QuestionsRes(RtnCode.PARAMETER_ERROR.getMessage());
 		}
 		
