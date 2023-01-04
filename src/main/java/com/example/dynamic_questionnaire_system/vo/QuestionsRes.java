@@ -1,5 +1,6 @@
 package com.example.dynamic_questionnaire_system.vo;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,10 @@ public class QuestionsRes {
 	private String title;
 	
 	private String description;
+	
+	private LocalDate startTime;
+	
+	private LocalDate endTime;
 	
 	private List<Questionnaire> questionnaireList;
 	
@@ -66,6 +71,22 @@ public class QuestionsRes {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public LocalDate getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(LocalDate startTime) {
+		this.startTime = startTime;
+	}
+
+	public LocalDate getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(LocalDate endTime) {
+		this.endTime = endTime;
 	}
 	
 	
