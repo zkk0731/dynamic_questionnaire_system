@@ -231,6 +231,8 @@ public class QuestionsServiceImpl implements QuestionsService{
 		
 		//回傳取得的題目
 		QuestionsRes res = new QuestionsRes();
+		res.setStartTime(questionnaire.getStartTime());
+		res.setEndTime(questionnaire.getEndTime());
 		res.setTitle(questionnaire.getTitle());
 		res.setDescription(questionnaire.getDescription());
 		res.setQaList(qaList);
