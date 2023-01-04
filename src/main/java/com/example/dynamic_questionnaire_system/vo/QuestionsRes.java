@@ -12,6 +12,10 @@ public class QuestionsRes {
 
 	private String message;
 	
+	private String title;
+	
+	private String description;
+	
 	private List<Questionnaire> questionnaireList;
 	
 	private List<QuestionsAndAns> qaList;
@@ -46,6 +50,22 @@ public class QuestionsRes {
 
 	public void setQaList(List<QuestionsAndAns> qaList) {
 		this.qaList = qaList;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	
