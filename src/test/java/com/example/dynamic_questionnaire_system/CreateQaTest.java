@@ -74,7 +74,7 @@ public class CreateQaTest {
 		QuestionsAndAns qa3 = new QuestionsAndAns("q16","b;b;b",false,false);
 		qa3.setId(7);
 		QuestionsAndAns qa4 = new QuestionsAndAns("q17","b;b;b",false,false);
-		QuestionsAndAns qa5 = new QuestionsAndAns("q17","a;c;d",false,false);
+		QuestionsAndAns qa5 = new QuestionsAndAns("q18","a;c;d",false,false);
 		List<QuestionsAndAns> qaList = Arrays.asList(qa1,qa2,qa3,qa4,qa5);
 		req.setQaList(qaList);
 		

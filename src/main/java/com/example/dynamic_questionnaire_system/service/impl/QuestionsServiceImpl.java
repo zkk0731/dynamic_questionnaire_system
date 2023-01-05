@@ -178,7 +178,7 @@ public class QuestionsServiceImpl implements QuestionsService{
 						
 						//因為是原有的問題更新 將他從map拿掉
 						addNewQuestionMap.remove(item2.getQuestions());
-						break;
+						
 					}else {
 						
 						//問題放入map
