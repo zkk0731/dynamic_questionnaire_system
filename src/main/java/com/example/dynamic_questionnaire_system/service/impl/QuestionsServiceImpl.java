@@ -47,7 +47,7 @@ public class QuestionsServiceImpl implements QuestionsService{
 //		Questionnaire questionnaireList = questionnaireDao.findByTitle(req.getTitle());
 		
 		//判斷問卷名稱是否存在
-		if(!questionnaireDao.existsByTitle(req.getTitle())) {
+		if(questionnaireDao.existsByTitle(req.getTitle())) {
 			return new QuestionsRes(RtnCode.TITLE_ALREADY_EXIST.getMessage());
 		}
 		
