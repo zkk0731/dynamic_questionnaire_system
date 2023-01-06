@@ -12,5 +12,5 @@ public interface UsersDao extends JpaRepository<Users, Integer>{
 
 	public List<Users> findByQuestionnaireTitle(String questionnaireTitle);
 	
-	public List<Users> findAllByOrderByFinishTimeDesc();
+	public List<Users> findByQuestionnaireTitleOrderByFinishTimeDesc(String questionnaireTitle);
 }

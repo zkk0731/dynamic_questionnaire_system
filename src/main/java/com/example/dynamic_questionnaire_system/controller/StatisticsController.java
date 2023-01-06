@@ -1,6 +1,7 @@
 package com.example.dynamic_questionnaire_system.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,8 +32,12 @@ public class StatisticsController {
 	}
 	
 	@PostMapping(value = "/read_all_users")
-	public AnsStatisticsRes readAllUsers() {
-		return ansStatisticsService.readAllUsers();
+	public AnsStatisticsRes readAllUsers(@RequestBody AnsStatisticsReq req) {
+		if(!StringUtils.hasText(req.getQuestionnaireTitle())) {
+			return new AnsStatisticsRes(RtnCode.PARAMETER_REQUIRED.getMessage());
+		}
+		
+		return ansStatisticsService.readAllUsers(req);
 	}
 	
 	@PostMapping(value = "/read_user_info")

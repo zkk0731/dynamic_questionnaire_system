@@ -126,8 +126,8 @@ public class AnsStatisticsServiceImpl implements AnsStatisticsService{
 
 	//顯示所有填寫人
 	@Override
-	public AnsStatisticsRes readAllUsers() {
-		List<Users> resultList = usersDao.findAllByOrderByFinishTimeDesc();
+	public AnsStatisticsRes readAllUsers(AnsStatisticsReq req) {
+		List<Users> resultList = usersDao.findByQuestionnaireTitleOrderByFinishTimeDesc(req.getQuestionnaireTitle());
 		
 		if(resultList == null) {
 			return new AnsStatisticsRes(RtnCode.NO_USERS.getMessage());

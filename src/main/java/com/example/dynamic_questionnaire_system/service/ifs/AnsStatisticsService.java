@@ -9,7 +9,7 @@ public interface AnsStatisticsService {
 	public AnsStatisticsRes statistics(AnsStatisticsReq req);
 	
 	//顯示所有填寫人
-	public AnsStatisticsRes readAllUsers();
+	public AnsStatisticsRes readAllUsers(AnsStatisticsReq req);
 	
 	//顯示單一填寫人填寫資料
 	public AnsStatisticsRes readUsersInfo(AnsStatisticsReq req);

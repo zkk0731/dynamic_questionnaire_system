@@ -31,7 +31,10 @@ public class StatisticsTest {
 	
 	@Test
 	public void readAllUsersTest() {
-		AnsStatisticsRes res = ansStatisticsService.readAllUsers();
+		AnsStatisticsReq req = new AnsStatisticsReq();
+		req.setQuestionnaireTitle("test3");
+		
+		AnsStatisticsRes res = ansStatisticsService.readAllUsers(req);
 		
 		System.out.println(res.getMessage());
 		
