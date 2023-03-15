@@ -94,7 +94,7 @@ public class QuestionsServiceImpl implements QuestionsService{
 	//顯示所有問卷
 	@Override
 	public QuestionsRes readAllQuestionnaire() {
-		List<Questionnaire> result = questionnaireDao.findAll();
+		List<Questionnaire> result = questionnaireDao.findAllByOrderByIdDesc();
 		
 		//判斷DB裡是否有問卷
 		if(CollectionUtils.isEmpty(result)) {
@@ -259,7 +259,7 @@ public class QuestionsServiceImpl implements QuestionsService{
 		
 		QuestionsRes res = new QuestionsRes();
 		List<Questionnaire> result = new ArrayList<>();
-		result = questionnaireDao.findByTitleContainingAndStartTimeGreaterThanEqualAndEndTimeLessThanEqual(searchText, startDate, endDate);
+		result = questionnaireDao.findByTitleContainingAndStartTimeGreaterThanEqualAndEndTimeLessThanEqualOrderByIdDesc(searchText, startDate, endDate);
 		
 		
 		//篩選後沒得到結果回傳訊息

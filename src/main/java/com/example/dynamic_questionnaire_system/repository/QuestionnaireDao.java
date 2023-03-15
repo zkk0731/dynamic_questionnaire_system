@@ -17,8 +17,10 @@ public interface QuestionnaireDao extends JpaRepository<Questionnaire, Integer>{
 	
 	public void deleteByTitleIn(List<String> titleList);
 	
-	public List<Questionnaire> findByTitleContainingAndStartTimeGreaterThanEqualAndEndTimeLessThanEqual(String title, LocalDate startTime, LocalDate endTime);
+	public List<Questionnaire> findByTitleContainingAndStartTimeGreaterThanEqualAndEndTimeLessThanEqualOrderByIdDesc(String title, LocalDate startTime, LocalDate endTime);
 	
 	public boolean existsByTitle(String title);
+	
+	public List<Questionnaire> findAllByOrderByIdDesc();
 	
 }
